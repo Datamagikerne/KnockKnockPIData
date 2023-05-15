@@ -9,7 +9,7 @@ from socket import *
 from pyzbar.pyzbar import decode
 import cv2
 
-REST_URL = "http://localhost:5093/api/arrivals"
+REST_URL = "https://knockknockrest2.azurewebsites.net/api/arrivals"
 UDP_IP = "255.255.255.255"
 
 serverPort = 12000
@@ -20,6 +20,7 @@ serverSocket.bind(serverAddress)
 resport = 12100
 respSocket = socket(AF_INET, SOCK_DGRAM)
 Piservername = '192.168.104.140'
+testServername = '127.0.0.1'
 
 print("The server is ready")
 count = 1
@@ -36,26 +37,32 @@ while True:
         id = decode(img)[0].data.decode('utf-8')
         ArrivalTime = datetime.datetime.now(cet).strftime("%Y-%m-%dT%H:%M:%SZ")
         data = {
+            "id": 0,
             "arrivalTime": ArrivalTime,
             "qrCode": id,
-            "name": ''
+            "name": "string"
         }
         print(id)
         print(ArrivalTime)
         response = requests.post(REST_URL, json=data)
-        print(response)
+        # print(response.text)
         if response.ok:
             responseOK = 'ok'
-            respSocket.sendto(responseOK.encode(),(Piservername, resport))
+            print((responseOK))
+            respSocket.sendto(responseOK.encode(), (Piservername, resport))
+            respSocket.sendto(responseOK.encode(), (testServername, resport))
         if response.status_code == 400:
             responseBadR = '400 Bad request'
-            print('400 Bad request.....')
+            print(responseBadR)
             respSocket.sendto(responseBadR.encode(), (Piservername, resport))
+            respSocket.sendto(responseBadR.encode(), (testServername, resport))
 
         count += 1
     except:
         print('Not a qr code')
         response = 'not a QR code'
         respSocket.sendto(response.encode(), (Piservername, resport))
+        respSocket.sendto(response.encode(), (testServername, resport))
+
 
 
