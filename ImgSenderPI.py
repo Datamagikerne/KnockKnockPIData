@@ -1,3 +1,4 @@
+# runs on PI
 from PIL import Image
 from time import sleep
 from picamera import PiCamera
@@ -15,11 +16,13 @@ camera.resolution = (320, 240)
 camera.color_effects = (128, 128)
 button = Button(2)
 
+
 def take_img():
     camera.start_preview()
     sleep(3)
     camera.capture(img_name)
     camera.stop_preview()
+
 
 while True:
     button.wait_for_press()

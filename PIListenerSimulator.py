@@ -1,7 +1,5 @@
+# To test proxy without PI
 from socket import *
-from time import sleep
-
-
 
 port = 12100
 s = socket(AF_INET, SOCK_DGRAM)

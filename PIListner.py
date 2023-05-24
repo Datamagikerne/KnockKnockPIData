@@ -1,4 +1,4 @@
-#virker kun på PI
+# runs on PI
 from socket import *
 from gpiozero import LED, Buzzer
 from time import sleep
